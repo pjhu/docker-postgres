@@ -1,0 +1,21 @@
+version: '3'
+services:
+    postgres-master:
+      image: postgres-test:1.0
+      build: .
+      container_name: postgres-master
+      ports:
+        - 15432:5432
+      environment:
+        PG_ROLE: master
+        POSTGRES_PASSWORD: 123
+    postgres-slave:
+      image: postgres-test:1.0
+      container_name: postgres-slave
+      ports:
+        - 25433:5432
+      depends_on:
+        - postgres-master
+      environment:
+        PG_ROLE: slave
+        PG_MASTER_SERVICE_HOST: postgres-master
